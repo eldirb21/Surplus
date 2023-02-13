@@ -2,7 +2,7 @@ import {ImageBackground, StyleSheet, View} from 'react-native';
 import React, {useState} from 'react';
 import {Buttons, Containers, TextInputs, Texts} from '../../components/atoms';
 import {AUTH_LABEL} from '../../constants/labelConstants';
-import {bgsign} from '../../assets/images';
+import {bgsign, icFb, icGoogle} from '../../assets/images';
 import DynamicSize from '../../constants/dynamicSize';
 import {colors} from '../../constants/themes';
 import {fonts} from '../../constants/fonts';
@@ -106,19 +106,21 @@ const SignIn = ({navigation}) => {
         <View style={styles.orContent}>
           <Buttons
             midle
-            disable={true}
+            bgColor={colors.greyLight}
             style={styles.btn}
             title={AUTH_LABEL.FB}
-            onPress={() => navigation.navigate('MainTab')}
-            iconName="facebook-square"
+            // onPress={() => navigation.navigate('MainTab')}
+            iconImage={icFb}
+            size={20}
           />
           <Buttons
             midle
-            disable={true}
-            style={styles.btn}
+            bgColor={colors.greyLight}
+            style={{...styles.btn, backgroundColor: colors.greyLight}}
             title={AUTH_LABEL.GOG}
-            onPress={() => navigation.navigate('MainTab')}
-            iconName="google"
+            // onPress={() => navigation.navigate('MainTab')}
+            iconImage={icGoogle}
+            size={14}
           />
         </View>
 
