@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
   label: {
     color: colors.dark,
     fontWeight: '500',
+    marginBottom:2
   },
   iconRight: {
     position: 'absolute',

@@ -30,7 +30,7 @@ const labels = {
       YREGIST: 'Yuk daftar',
       FORGOT_PASS: 'Lupa kata sandi?',
       FB: 'Facebook',
-      GOG: 'google',
+      GOG: 'Google',
       MAIL: 'E-mail',
       PMAIL: 'Alamat email kamu',
       PASS: 'Kata sandi',
