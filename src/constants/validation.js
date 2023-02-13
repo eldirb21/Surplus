@@ -9,126 +9,53 @@ var setpassReq = new RegExp(
 );
 var colored = [colors.grey, colors.danger, colors.persianGreen];
 
-const validateColor = (model, value) => {
-  var defaults = colors.grey;
-  var errors = colors.danger;
-  var matchs = colors.persianGreen;
-
-  var newModel = {};
-
-  /** EMAIL */
-  if (checkIsNull(model['email']) && !value) {
-    newModel['email'] = true;
-  } else {
-    if (model['email'] && value && setemailReq.test(value) === false) {
-      newModel['email'] = true;
-    } else if (value && setemailReq.test(value)) {
-      if (value && setemailReq.test(value)) {
-        newModel['email'] = false;
-      } else !newModel['email'];
-    } else !newModel['email'];
-  }
-
-  /** PASSWORD */
-  if (checkIsNull(model['password']) && !value) {
-    newModel['password'] = true;
-  } else {
-    if (model['password'] && value && !setpassReq.test(value)) {
-      newModel['password'] = true;
-    } else if (model['password'] && value && value.length < setpassLength) {
-      newModel['password'] = true;
-    } else {
-      if (value && value.length >= setpassLength) {
-        newModel['password'] = false;
-      } else !newModel['password'];
-    }
-  }
-
-  /** CONFIRM PASSWORD */
-  if (model['password'] !== model['confirmPass']) {
-    newModel['confirmPass'] = true;
-  } else !newModel['confirmPass'];
-
-  return newModel;
-};
-
-const validateMessage = (model, value) => {
-  var newModel = {};
-
-  /** EMAIL */
-  if (checkIsNull(model['email']) && !value) {
-    newModel['email'] = 'Please input your e-mail';
-  } else {
-    if (model['email'] && value && setemailReq.test(value) === false) {
-      newModel['email'] = 'E-mail not match';
-    } else !newModel['email'];
-  }
-
-  /** PASSWORD */
-  if (checkIsNull(model['password']) && !value) {
-    newModel['password'] = 'Please input your password';
-  } else {
-    if (model['password'] && value && !setpassReq.test(value)) {
-      newModel['password'] = 'Password request is simbol, numbers and letters';
-    } else if (model['password'] && value && value.length < setpassLength) {
-      newModel['password'] = 'Minimum password 8 characters';
-    } else !newModel['password'];
-  }
-
-  /** CONFIRM PASSWORD */
-  console.log(model['password']);
-  console.log(model['confirmPass']);
-  if (model['password'] !== model['confirmPass']) {
-    newModel['confirmPass'] = 'Password not match';
-  } else !newModel['confirmPass'];
-
-  return newModel;
-};
-
 const validate = (model, value) => {
-  // var bool = validateColor(model, value);
-  // var str = validateMessage(model, value);
   var bool = {};
-  var str = {};
+  var mess = {};
   var modelItem = value ? value : model;
-  console.log('modelItem = ', setemailReq.test(modelItem));
-  console.log('modelItem = ', modelItem);
 
   /** EMAIL */
   if (
     checkIsNull(typeof modelItem === 'string' ? modelItem : modelItem['email'])
   ) {
-    str['email'] = 'Please input your e-mail';
-    bool['email'] = true;
+    mess['email'] = 'Please input your e-mail';
+    bool['email'] = colored[1];
   } else if (!setemailReq.test(modelItem)) {
-    str['email'] = 'E-mail not match';
-    bool['email'] = true;
+    mess['email'] = 'E-mail not match';
+    bool['email'] = colored[1];
+  } else if (setemailReq.test(modelItem)) {
+    !mess['email'];
+    bool['email'] = colored[2];
   } else {
-    !str['email'];
+    !mess['email'];
     !bool['email'];
   }
-  // if (checkIsNull(model['email']) && !value) {
-  //   bool['email'] = true;
-  //   str['email'] = true;
-  // } else {
-  //   if (model['email'] && value && setemailReq.test(value) === false) {
-  //     bool['email'] = colored[0];
-  //     str['email'] = colored[0];
-  //   } else if (value && setemailReq.test(value)) {
-  //     if (value && setemailReq.test(value)) {
-  //       bool['email'] = false;
-  //       str['email'] = false;
-  //     } else {
-  //       !bool['email'];
-  //       !str['email'];
-  //     }
-  //   } else {
-  //     !bool['email'];
-  //     !str['email'];
-  //   }
-  // }
 
-  return {bool, str};
+  /** PASSWORD */
+  if (
+    checkIsNull(
+      typeof modelItem === 'string' ? modelItem : modelItem['password'],
+    )
+  ) {
+    mess['password'] = 'Please input your password';
+    bool['password'] = colored[1];
+  } else if (!setpassReq.test(modelItem)) {
+    mess['password'] = 'Password request is simbol, numbers and letters';
+    bool['password'] = colored[1];
+  } else if (modelItem.length < setpassLength) {
+    mess['password'] = 'Minimum password 8 characters';
+    bool['password'] = colored[1];
+  } else if (
+    setpassReq.test(modelItem) ===
+    (modelItem.length < setpassLength === false)
+  ) {
+    !mess['password'];
+    bool['password'] = colored[2];
+  } else {
+    !mess['password'];
+    !bool['password'];
+  } 
+
+  return {bool, mess};
 };
-export {validateColor, validateMessage, checkIsNull};
 export default validate;

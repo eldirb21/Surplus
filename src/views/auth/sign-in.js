@@ -1,4 +1,9 @@
-import {ImageBackground, StyleSheet, View} from 'react-native';
+import {
+  ImageBackground,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, {useState} from 'react';
 import {Buttons, Containers, TextInputs, Texts} from '../../components/atoms';
 import {AUTH_LABEL} from '../../constants/labelConstants';
@@ -14,18 +19,19 @@ const SignIn = ({navigation}) => {
     email: '',
     password: '',
   });
-  const [errors, seterrors] = useState({});
-  const [errorColors, seterrorColors] = useState({});
+  const [errors, seterrors] = useState({
+    bool: {},
+    mess: {},
+  });
 
   const doLogin = () => {
     var isvalidate = validate(state);
-    console.log('isvalidate = ', isvalidate);
-    // seterrors(isvalidate.str);
-    // seterrorColors(isvalidate.bool);
-    // if (Object.keys(isvalidate.bool).length === 0) {
-    //   navigation.navigate('MainTab');
-    // }
+    seterrors(isvalidate);
+    if (Object.keys(isvalidate.mess).length === 0) {
+      navigation.navigate('MainTab');
+    }
   };
+
   return (
     <Containers isScroll>
       <ImageBackground resizeMode="cover" style={styles.bg} source={bgsign}>
@@ -43,21 +49,10 @@ const SignIn = ({navigation}) => {
           onChangeText={val => {
             setState(setModelObj('email', val, state));
             var isError = validate(state, val);
-            console.log(isError);
-            // seterrors({...errors, email: validate(state, val).str.email});
-            // seterrorColors({
-            //   ...errorColors,
-            //   email: validate(state, val).bool.email,
-            // });
+            seterrors(isError);
           }}
-          invalidColor={
-            errorColors.email
-              ? colors.danger
-              : errorColors.email === false
-              ? colors.persianGreen
-              : colors.grey
-          }
-          errors={errors.email}
+          invalidColor={errors.bool.email}
+          errors={errors.mess.email}
         />
         <TextInputs
           isPassword
@@ -67,23 +62,11 @@ const SignIn = ({navigation}) => {
           value={state.password}
           onChangeText={val => {
             setState(setModelObj('password', val, state));
-            seterrors({
-              ...errors,
-              password: validate(state, val).str.password,
-            });
-            seterrorColors({
-              ...errorColors,
-              password: validate(state, val).bool.password,
-            });
+            var isError = validate(state, val);
+            seterrors(isError);
           }}
-          invalidColor={
-            errorColors.password
-              ? colors.danger
-              : errorColors.password === false
-              ? colors.persianGreen
-              : colors.grey
-          }
-          errors={errors.password}
+          invalidColor={errors.bool.password}
+          errors={errors.mess.password}
         />
         <Buttons
           isText
@@ -92,7 +75,7 @@ const SignIn = ({navigation}) => {
           onPress={() => navigation.navigate('MainTab')}
         />
         <Buttons
-          // disable={state.password === '' || state.email === ''}
+          disable={state.password === '' || state.email === ''}
           style={{...styles.btn, marginTop: 25}}
           title={AUTH_LABEL.SIGNIN}
           onPress={doLogin}
@@ -123,6 +106,13 @@ const SignIn = ({navigation}) => {
             size={14}
           />
         </View>
+
+        <TouchableOpacity
+          style={styles.contentBtnRegist}
+          onPress={() => navigation.navigate('SignUp')}>
+          <Texts style={styles.textbtnRegist}>{AUTH_LABEL.NOT_ACCOUNT}</Texts>
+          <Texts style={styles.textLableRegist}>{AUTH_LABEL.YREGIST}</Texts>
+        </TouchableOpacity>
 
         <View style={styles.footer}>
           <Texts style={styles.policy}>
@@ -216,5 +206,18 @@ const styles = StyleSheet.create({
   },
   input: {
     // marginTop: 20,
+  },
+  contentBtnRegist: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  textbtnRegist: {
+    color: colors.darkGrey,
+  },
+  textLableRegist: {
+    color: colors.persianGreen,
+    fontWeight: 'bold',
+    marginLeft: 4,
   },
 });
